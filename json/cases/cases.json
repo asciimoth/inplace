@@ -1,0 +1,118 @@
+{
+  "table": [
+    {
+      "name": "Happy path",
+      "constructor": "New",
+      "input": "{}",
+      "ops": [
+        {
+          "operation": "set",
+          "keypath": [],
+          "value": "aaaaa",
+          "error": "key path should contain at least one element"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "this value will be rewritten"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "val1"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "D",
+            "E"
+          ],
+          "value": "val2"
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "val1"
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "A",
+            "B",
+            "D",
+            "E"
+          ],
+          "value": "val2"
+        },
+        {
+          "operation": "get",
+          "keypath": [],
+          "value": ""
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "wrong",
+            "key",
+            "path"
+          ],
+          "value": ""
+        },
+        {
+          "operation": "save",
+          "valuefile": "cases/case1-outp"
+        }
+      ]
+    },
+    {
+      "name": "HuJSON",
+      "constructor": "NewHuJSON",
+      "inputfile": "cases/case2-inp",
+      "ops": [
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "val1"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "D",
+            "E"
+          ],
+          "value": "val2"
+        },
+        {
+          "operation": "save",
+          "valuefile": "cases/case2-outp"
+        }
+      ]
+    },
+    {
+      "name": "broken input",
+      "constructor": "New",
+      "input": "sfadsfasdfa",
+      "error": "document loading\nhujson: line 1, column 1: invalid literal: sfadsfasdfa"
+    }
+  ]
+}

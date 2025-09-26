@@ -1,0 +1,7 @@
+{
+  // Comment
+  "Key": [
+    "Value1",
+    "Value2",
+  ],"A":{"B":{"C":"val1","D":{"E":"val2"}}}
+}
