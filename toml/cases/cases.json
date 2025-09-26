@@ -1,0 +1,149 @@
+{
+  "table": [
+    {
+      "name": "Happy path",
+      "constructor": "New",
+      "input": "",
+      "ops": [
+        {
+          "operation": "set",
+          "keypath": [],
+          "value": "aaaaa",
+          "error": "key path should contain at least one element"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "this value will be rewritten"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "val1"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "A",
+            "B",
+            "D",
+            "E"
+          ],
+          "value": "val2"
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "A",
+            "B",
+            "C"
+          ],
+          "value": "val1"
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "A",
+            "B",
+            "D",
+            "E"
+          ],
+          "value": "val2"
+        },
+        {
+          "operation": "get",
+          "keypath": [],
+          "value": ""
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "wrong",
+            "key",
+            "path"
+          ],
+          "value": ""
+        },
+        {
+          "operation": "save",
+          "valuefile": "cases/case1-outp"
+        }
+      ]
+    },
+    {
+      "name": "Cargo",
+      "constructor": "New",
+      "inputfile": "cases/case2-inp",
+      "ops": [
+        {
+          "operation": "get",
+          "keypath": [
+            "package",
+            "name"
+          ],
+          "value": "NAME"
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "package",
+            "version"
+          ],
+          "value": "1.1.1"
+        },
+        {
+          "operation": "get",
+          "keypath": [
+            "dependencies",
+            "name3",
+            "version"
+          ],
+          "value": "3.1.6"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "package",
+            "name"
+          ],
+          "value": "NaMe"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "package",
+            "version"
+          ],
+          "value": "6.6.6"
+        },
+        {
+          "operation": "set",
+          "keypath": [
+            "dependencies",
+            "name3",
+            "version"
+          ],
+          "value": "9.9.9"
+        },
+        {
+          "operation": "save",
+          "valuefile": "cases/case2-outp"
+        }
+      ]
+    },
+    {
+      "name": "broken input",
+      "constructor": "New",
+      "input": "sfadsfasdfa",
+      "error": "document loading\nat 1:11: got invalid token, wanted \"=\""
+    }
+  ]
+}

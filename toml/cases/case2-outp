@@ -1,0 +1,15 @@
+[package]
+name = "NaMe"
+version = "6.6.6"
+edition = "2018"
+authors = ["JohnDoe"]
+description = "DESCRIPTION"
+repository = "https://example.com/jdoe/name"
+readme = "README.md"
+license = "WTFPL"
+
+[dependencies]
+name1 = "0.22"
+name2 = "1"
+name3 = {version = "9.9.9", features = ["feature"]}
+
