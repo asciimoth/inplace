@@ -1,4 +1,4 @@
-// toml implements [inplace/Document] for TOML sources.
+// regexp implements [github.com/asciimoth/inplace/Document] for TOML sources.
 package regexp
 
 import (

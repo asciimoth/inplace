@@ -1,4 +1,4 @@
-// toml implements [inplace/Document] for TOML sources.
+// toml implements [github.com/asciimoth/inplace/Document] for TOML sources.
 package toml
 
 import (

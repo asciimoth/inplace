@@ -1,4 +1,4 @@
-// json implements [inplace/Document] for JSON sources.
+// json implements [github.com/asciimoth/inplace/Document] for JSON sources.
 package json
 
 import (

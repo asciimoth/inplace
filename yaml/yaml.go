@@ -1,4 +1,4 @@
-// yaml implements [inplace/Document] for YAML sources.
+// yaml implements [github.com/asciimoth/inplace/Document] for YAML sources.
 package yaml
 
 import (

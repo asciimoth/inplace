@@ -1,7 +1,7 @@
-package inplace
-
 // Inpalce provide unified interface for updating specific values in different document
 // types like json whith document structure and comments preserving.
+package inplace
+
 import (
 	"errors"
 	"os"
@@ -28,7 +28,10 @@ var (
 type KeyPath = []string
 
 // Document represents the source of values such as a configuration file.
-// For concrete document types, see [inplace/json], [inplace/toml], [inplace/yaml], [inplace/regexp].
+// For concrete document types, see [github.com/asciimoth/inplace/json],
+// [github.com/asciimoth/inplace/toml],
+// [github.com/asciimoth/inplace/yaml],
+// [github.com/asciimoth/inplace/regexp].
 type Document interface {
 	// Get returns the value of the element identified by the provided path.
 	// If the element does not exist, Get should return the empty string.
@@ -43,17 +46,17 @@ type Document interface {
 	Save() []byte
 }
 
-// New is the type of a Document constructor.
+// New is the type of a [Document] constructor.
 type New = func(src []byte) (Document, error)
 
-// Patch specifies an element in a Document that should be changed or inserted
+// Patch specifies an element in a [Document] that should be changed or inserted
 // and the new value for that element.
 type Patch struct {
 	KP    KeyPath
 	Value string
 }
 
-// PatchBin constructs a new Document from src using con, applies all patches,
+// PatchBin constructs a new [Document] from src using con, applies all patches,
 // and serializes the updated document back to bytes.
 func PatchBin(con New, src []byte, patches []Patch) ([]byte, error) {
 	doc, err := con(src)
