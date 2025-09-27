@@ -1,7 +1,9 @@
 package inplace
 
+// Inpalce provide unified interface for updating specific values in different document
+// types like json whith document structure and comments preserving.
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -9,28 +11,50 @@ import (
 )
 
 var (
-	ErrAbsPath          = fmt.Errorf("path must be relative for provided root")
-	ErrDocumentLoad     = fmt.Errorf("document loading")
-	ErrVoidKeyPath      = fmt.Errorf("key path should contain at least one element")
-	ErrDocumentPatching = fmt.Errorf("document patching")
+	// ErrAbsPath is returned when a path supplied to PatchFile is absolute.
+	ErrAbsPath = errors.New("path must be relative for provided root")
+	// ErrDocumentLoad is returned when a document cannot be loaded.
+	ErrDocumentLoad = errors.New("document loading")
+	// ErrVoidKeyPath is returned when a key path is empty.
+	ErrVoidKeyPath = errors.New("key path should contain at least one element")
+	// ErrDocumentPatching is returned when a document cannot be patched.
+	ErrDocumentPatching = errors.New("document patching")
 )
 
+// KeyPath is a slice of keys representing the path to a value.
+// For example, in this JSON object the path of "value" will be []string{"A","B","C"}:
+//
+//	{"A":{"B":{"C":"value"}}}
 type KeyPath = []string
 
+// Document represents the source of values such as a configuration file.
+// For concrete document types, see [inplace/json], [inplace/toml], [inplace/yaml], [inplace/regexp].
 type Document interface {
+	// Get returns the value of the element identified by the provided path.
+	// If the element does not exist, Get should return the empty string.
+	// All non-string values should be converted to their string representation.
 	Get(kp KeyPath) string
+
+	// Set changes the value of the element identified by the provided path,
+	// or inserts the element if it does not exist.
 	Set(kp KeyPath, value string) error
+
+	// Save serializes the Document and returns the resulting bytes.
 	Save() []byte
 }
 
-// Constructor for Document
+// New is the type of a Document constructor.
 type New = func(src []byte) (Document, error)
 
+// Patch specifies an element in a Document that should be changed or inserted
+// and the new value for that element.
 type Patch struct {
 	KP    KeyPath
 	Value string
 }
 
+// PatchBin constructs a new Document from src using con, applies all patches,
+// and serializes the updated document back to bytes.
 func PatchBin(con New, src []byte, patches []Patch) ([]byte, error) {
 	doc, err := con(src)
 	if err != nil {
@@ -45,19 +69,22 @@ func PatchBin(con New, src []byte, patches []Patch) ([]byte, error) {
 	return doc.Save(), nil
 }
 
+// PatchStr is like [PatchBin] but accepts and returns strings.
 func PatchStr(con New, src string, patches []Patch) (string, error) {
 	b, err := PatchBin(con, []byte(src), patches)
 	if err != nil {
 		return "", err
 	}
+	if b == nil {
+		return "", err
+	}
 	return string(b), nil
 }
 
-// PatchFile applies patches to file `path` inside provided os.Root `root`.
-// - `path` must be a path inside the root (not an absolute path).
-// - Caller is responsible for closing the provided *os.Root when done.
-//
-// Uses an atomic replace: write to a temporary file inside the same root and rename it over the original.
+// PatchFile applies patches to the file at path within the provided [os.Root].
+// The path must be relative to the root (an absolute path will produce
+// [ErrAbsPath]). The caller is responsible for closing the provided [os.Root]
+// when done. PatchFile uses an atomic file replace when possible.
 func PatchFile(con New, root *os.Root, path string, patches []Patch) error {
 	if filepath.IsAbs(path) {
 		return ErrAbsPath

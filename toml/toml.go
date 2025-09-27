@@ -1,3 +1,4 @@
+// toml implements [inplace/Document] for TOML sources.
 package toml
 
 import (
@@ -18,10 +19,14 @@ var _ inplace.Document = (*Document)(nil)
 // Compile-time assertion that New func implements iface.New
 var _ inplace.New = New
 
+// Document represents a TOML document.
 type Document struct {
 	doc tomledit.Document
 }
 
+// Get returns the value of the element identified by the provided path.
+// If the element does not exist, Get returns the empty string.
+// Get converts all non-string values to their string representation.
 func (d *Document) Get(kp inplace.KeyPath) string {
 	if len(kp) < 1 {
 		return ""
@@ -36,6 +41,8 @@ func (d *Document) Get(kp inplace.KeyPath) string {
 	return tomlStringValue(entry.Value.String())
 }
 
+// Set changes the value of the element identified by the provided path,
+// or inserts the element if it does not exist.
 func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	if len(kp) < 1 {
 		return inplace.ErrVoidKeyPath
@@ -48,6 +55,7 @@ func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	return insertValue(&d.doc, kp, newVal)
 }
 
+// Save serializes the Document and returns the resulting bytes.
 func (d *Document) Save() []byte {
 	var buf bytes.Buffer
 	if err := tomledit.Format(&buf, &d.doc); err != nil {
@@ -56,6 +64,7 @@ func (d *Document) Save() []byte {
 	return buf.Bytes()
 }
 
+// New construct [Document] from TOML.
 func New(src []byte) (inplace.Document, error) {
 	doc, err := tomledit.Parse(bytes.NewReader(src))
 	if err != nil {

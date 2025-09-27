@@ -1,3 +1,4 @@
+// toml implements [inplace/Document] for TOML sources.
 package regexp
 
 import (
@@ -12,10 +13,17 @@ var _ inplace.Document = (*Document)(nil)
 // Compile-time assertion that New func implements iface.New
 var _ inplace.New = New
 
+// Document represents arbitrary binary document that can be manipulated with
+// regular expressions.
 type Document struct {
 	src []byte
 }
 
+// Get returns the value of the element identified by the provided path.
+// Path is a series of regexps constricting the selected substring
+// of the document. E.g. `[]string{"substring", "substr", "bs"}`.
+// Get returns first match of kp.
+// If the element does not exist, Get returns the empty string.
 func (d *Document) Get(kp inplace.KeyPath) string {
 	if len(kp) < 1 {
 		return ""
@@ -23,6 +31,8 @@ func (d *Document) Get(kp inplace.KeyPath) string {
 	return string(regexpRecursiveGet(d.src, kp))
 }
 
+// Set changes all occurs of kp ti newVal.
+// If there is no occurs, document stays unchanged.
 func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	if len(kp) < 1 {
 		return inplace.ErrVoidKeyPath
@@ -31,10 +41,12 @@ func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	return nil
 }
 
+// Save returns raw bytes of the document.
 func (d *Document) Save() []byte {
 	return d.src
 }
 
+// New construct [Document] from arbitrary bytes.
 func New(src []byte) (inplace.Document, error) {
 	return &Document{src}, nil
 }

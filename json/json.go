@@ -1,3 +1,4 @@
+// json implements [inplace/Document] for JSON sources.
 package json
 
 import (
@@ -19,11 +20,15 @@ var _ inplace.New = New
 // Compile-time assertion that NewHuJSON func implements iface.New
 var _ inplace.New = NewHuJSON
 
+// Document represents a JSON or HuJSON document.
 type Document struct {
 	doc    hujs.Value
 	hujson bool
 }
 
+// Get returns the value of the element identified by the provided path.
+// If the element does not exist, Get returns the empty string.
+// Get converts all non-string values to their string representation.
 func (d *Document) Get(kp inplace.KeyPath) string {
 	if len(kp) < 1 {
 		return ""
@@ -35,6 +40,8 @@ func (d *Document) Get(kp inplace.KeyPath) string {
 	return fmt.Sprint(val.Value)
 }
 
+// Set changes the value of the element identified by the provided path,
+// or inserts the element if it does not exist.
 func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	if len(kp) < 1 {
 		return inplace.ErrVoidKeyPath
@@ -73,6 +80,7 @@ func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	return nil
 }
 
+// Save serializes the Document and returns the resulting bytes.
 func (d *Document) Save() []byte {
 	if !d.hujson {
 		// Make output compilant to standadrt JSON
@@ -81,6 +89,7 @@ func (d *Document) Save() []byte {
 	return d.doc.Pack()
 }
 
+// New construct [Document] from JSON.
 func New(src []byte) (inplace.Document, error) {
 	doc, err := hujs.Parse(src)
 	if err != nil {
@@ -89,6 +98,7 @@ func New(src []byte) (inplace.Document, error) {
 	return &Document{doc, false}, nil
 }
 
+// New construct [Document] from HuJSON.
 func NewHuJSON(src []byte) (inplace.Document, error) {
 	doc, err := hujs.Parse(src)
 	if err != nil {

@@ -1,3 +1,4 @@
+// yaml implements [inplace/Document] for YAML sources.
 package yaml
 
 import (
@@ -17,10 +18,14 @@ var _ inplace.Document = (*Document)(nil)
 // Compile-time assertion that New func implements iface.New
 var _ inplace.New = New
 
+// Document represents a YAML document.
 type Document struct {
 	ast ast.File
 }
 
+// Get returns the value of the element identified by the provided path.
+// If the element does not exist, Get returns the empty string.
+// Get converts all non-string values to their string representation.
 func (d *Document) Get(kp inplace.KeyPath) string {
 	if len(kp) < 1 {
 		return ""
@@ -34,6 +39,8 @@ func (d *Document) Get(kp inplace.KeyPath) string {
 	return node.GetToken().Value
 }
 
+// Set changes the value of the element identified by the provided path,
+// or inserts the element if it does not exist.
 func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	if len(kp) < 1 {
 		return inplace.ErrVoidKeyPath
@@ -67,10 +74,12 @@ func (d *Document) Set(kp inplace.KeyPath, newVal string) error {
 	return nil
 }
 
+// Save serializes the Document and returns the resulting bytes.
 func (d *Document) Save() []byte {
 	return []byte(d.ast.String())
 }
 
+// New construct [Document] from YAML.
 func New(src []byte) (inplace.Document, error) {
 	ast, err := parser.ParseBytes([]byte(src), parser.ParseComments)
 	if err != nil {
