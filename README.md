@@ -31,12 +31,12 @@ func main() {
 
 Note that this library created for specific cases with simple scalar values manipulation.  
 If you need more complex ast manipulation check this libs:
-- [tailscale/hujson](github.com/tailscale/hujson)
-- [creachadair/tomledit](github.com/creachadair/tomledit)
-- [goccy/go-yaml](github.com/goccy/go-yaml)
+- [tailscale/hujson](https://github.com/tailscale/hujson)
+- [creachadair/tomledit](https://github.com/creachadair/tomledit)
+- [goccy/go-yaml](https://github.com/goccy/go-yaml)
 
 If you need to just marshal/unmarshal formats to go data structures check this:
 - [stdlib encoding/json](https://pkg.go.dev/encoding/json)
-- [pelletier/go-toml](github.com/pelletier/go-toml)
-- [goccy/go-yaml](github.com/goccy/go-yaml)
+- [pelletier/go-toml](https://github.com/pelletier/go-toml)
+- [goccy/go-yaml](https://github.com/goccy/go-yaml)
 
